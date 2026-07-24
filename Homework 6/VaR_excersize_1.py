@@ -63,7 +63,7 @@ expanding_backtest = pd.DataFrame({
     "return": spx_portf,
     "Expanding VaR": expanding_normal_var,
 })
-\
+
 rolling_backtest["hit"] = rolling_backtest["return"] < rolling_backtest["Rolling VaR"]
 rolling_hit_rate = rolling_backtest.dropna()["hit"].mean()
 expanding_backtest["hit"] = expanding_backtest["return"] < expanding_backtest["Expanding VaR"]
