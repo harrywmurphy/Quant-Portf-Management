@@ -50,6 +50,27 @@ print("Normal VaR is", normal_var,)
 print("Normal CVaR is", normal_cvar)
 
 #2.2
+portf_rolling_vol=spx_portf.rolling(26).std().shift(1)
+rolling_normal_var=portf_rolling_vol*z
+portf_expanding_vol=spx_portf.expanding().std().shift(1)
+expanding_normal_var=portf_expanding_vol*z
+
+rolling_backtest = pd.DataFrame({
+    "return": spx_portf,
+    "Rolling VaR": rolling_normal_var,
+})
+expanding_backtest = pd.DataFrame({
+    "return": spx_portf,
+    "Expanding VaR": expanding_normal_var,
+})
+\
+rolling_backtest["hit"] = rolling_backtest["return"] < rolling_backtest["Rolling VaR"]
+rolling_hit_rate = rolling_backtest.dropna()["hit"].mean()
+expanding_backtest["hit"] = expanding_backtest["return"] < expanding_backtest["Expanding VaR"]
+expanding_hit_rate = expanding_backtest.dropna()["hit"].mean()
+
+print("Rolling hit rate:", (rolling_hit_rate*100).round(2), "%")
+print("Expanding hit rate:", (expanding_hit_rate*100).round(2), "%")
 
 
     
